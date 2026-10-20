@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>عالم الأرقام الصغيرة</title>
+
+<!-- ربط اللوغو والمانيفست باش يولي تطبيق -->
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2c3e50">
+
+<!-- الستايل -->
 <link rel="stylesheet" href="shared/style.css">
 </head>
 <body>
@@ -33,13 +41,24 @@
   </p>
 </div>
 
+<!-- مكتبة الصوت -->
 <script src="shared/voice.js"></script>
+
 <script>
-  // ترحيب صوتي عند أول ضغطة (باش المتصفح يسمح بالصوت)
+  // ترحيب صوتي عند أول ضغطة
   document.body.addEventListener('click', function welcome() {
     Voice.say('أهلاً يا بطل! اختر لعبة', 'welcome');
     document.body.removeEventListener('click', welcome);
   }, { once: true });
+</script>
+
+<!-- تشغيل التطبيق بلا أنترنت -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js');
+    });
+  }
 </script>
 
 </body>
