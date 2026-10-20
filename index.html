@@ -1,1 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عالم الأرقام الصغيرة</title>
+<link rel="stylesheet" href="shared/style.css">
+</head>
+<body>
 
+<h1>🌟 عالم الأرقام الصغيرة 🌟</h1>
+
+<div class="game">
+  <h2 style="font-size:1.5rem;color:#636e72">اختر لعبتك 👇</h2>
+
+  <div class="menu-grid">
+    <button class="menu-btn" id="btnNumbers" onclick="location.href='numbers.html'">
+      🔢
+      <span class="label">أرقام</span>
+    </button>
+    <button class="menu-btn" id="btnColors" onclick="location.href='colors.html'">
+      🎨
+      <span class="label">ألوان</span>
+    </button>
+    <button class="menu-btn" id="btnShapes" onclick="location.href='shapes.html'">
+      🔷
+      <span class="label">أشكال</span>
+    </button>
+  </div>
+
+  <p style="font-size:1.1rem;color:#999;margin-top:20px">
+    للأطفال من 3 إلى 4 سنوات 👶
+  </p>
+</div>
+
+<script src="shared/voice.js"></script>
+<script>
+  // ترحيب صوتي عند أول ضغطة (باش المتصفح يسمح بالصوت)
+  document.body.addEventListener('click', function welcome() {
+    Voice.say('أهلاً يا بطل! اختر لعبة', 'welcome');
+    document.body.removeEventListener('click', welcome);
+  }, { once: true });
+</script>
+
+</body>
+</html>
