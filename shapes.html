@@ -1,1 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الأشكال - عالم الأرقام الصغيرة</title>
+<link rel="stylesheet" href="shared/style.css">
+</head>
+<body>
 
+<h1 id="gameTitle">🔷 الأشكال</h1>
+
+<div class="game">
+  <!-- أزرار التنقل -->
+  <div class="modes">
+    <button id="mLearn" class="on" onclick="Game.switchMode('learn')">📖 تعليم</button>
+    <button id="mQuiz" onclick="Game.switchMode('quiz')">🎮 اختبار</button>
+  </div>
+
+  <!-- قسم التعليم -->
+  <div class="panel on" id="pLearn">
+    <h3>اضغط على أي شكل تسمع اسمه</h3>
+    <div class="grid" id="learnGrid"></div>
+    <div id="info">اختر شكل 👇</div>
+  </div>
+
+  <!-- قسم الاختبار -->
+  <div class="panel" id="pQuiz">
+    <div class="stars" id="stars">☆☆☆☆☆</div>
+    <div class="question" id="question">اضغط "اسمع" باش تبدا</div>
+    <button class="speak" onclick="Game.hear()">📢 اسمع</button>
+    <div class="grid" id="quizGrid"></div>
+    <div id="result"></div>
+  </div>
+
+  <button class="back-btn" onclick="location.href='index.html'">🏠 رجوع للرئيسية</button>
+</div>
+
+<script src="shared/voice.js"></script>
+<script src="shared/game-engine.js"></script>
+<script>
+  // تشغيل اللعبة وإعدادات قسم الأشكال
+  Game.init({
+    title: '🔷 الأشكال',
+    items: ['دائرة', 'مربع', 'مثلث'], // 3 أشكال فقط
+    speakItem: (s) => s,
+    targetSpeak: (s) => `وين راه ${s}؟`,
+    correctMsg: 'ممتاز! 🌟',
+    wrongMsg: 'عاود حاول 💪',
+    choicesCount: 3, // 3 خيارات (كلهم مع بعض)
+    colorMode: 'text', // لون موحد باش ما يتلخبطش
+    speechKey: 'shape_'
+  });
+</script>
+
+</body>
+</html>
