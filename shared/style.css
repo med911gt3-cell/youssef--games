@@ -1,6 +1,3 @@
-/* =========================================
-   style.css — ستايل موحد لكل الأقسام
-   ========================================= */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
@@ -40,102 +37,84 @@ h1 {
 
 .menu-btn:hover { transform: scale(1.05); }
 .menu-btn:active { transform: scale(0.95); }
-.menu-btn .label {
-  font-size: 1.2rem; margin-top: 8px; color: #333;
-}
+.menu-btn .label { font-size: 1.2rem; margin-top: 8px; color: #333; }
 
 #btnNumbers { border-color: #e74c3c; background: #ffe5e5; }
 #btnColors  { border-color: #3498db; background: #e5f0ff; }
 #btnShapes  { border-color: #2ecc71; background: #e5ffe8; }
 
-.modes, .levels {
+.modes {
   display: flex; justify-content: center; gap: 10px;
   margin-bottom: 15px; flex-wrap: wrap;
 }
 
-.modes button, .levels button {
+.modes button {
   border: none; padding: 12px 20px;
   font-size: 1.1rem; border-radius: 20px;
   cursor: pointer; transition: 0.2s; font-weight: bold;
-  color: #fff; min-height: 50px;
+  color: #fff; min-height: 50px; background: #0984e3;
 }
 
-.modes button { background: #0984e3; }
 .modes button.on { background: #e17055; transform: scale(1.05); }
-.levels button { background: #6c5ce7; font-size: 0.95rem; padding: 10px 15px; }
-.levels button.on { background: #00b894; transform: scale(1.05); }
-
-.modes button:hover, .levels button:hover { opacity: 0.85; }
 
 .panel { display: none; }
 .panel.on { display: block; }
 
 .grid {
-  display: grid; grid-template-columns: repeat(5, 1fr);
+  display: grid; grid-template-columns: repeat(3, 1fr); /* 3 أعمدة باش الكلمات تبان */
   gap: 10px; margin-top: 15px;
 }
 
+/* استثناء للأرقام باش تبقى كبار وتجي 5 في صف */
+.grid-nums { grid-template-columns: repeat(5, 1fr); }
+
 .box {
-  color: #fff; font-size: 2.8rem; font-weight: bold;
-  padding: 20px 0; border-radius: 15px;
+  color: #fff; font-size: 1.5rem; font-weight: bold; /* صغرنا الخط باش الكلمات تدخل */
+  padding: 15px 5px; border-radius: 15px;
   cursor: pointer; transition: 0.15s;
   text-shadow: 2px 2px 3px rgba(0,0,0,0.3);
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   min-height: 80px;
   display: flex; align-items: center; justify-content: center;
+  word-wrap: break-word; text-align: center;
 }
+
+/* الاستثناء للأرقام باش ترجع كبيرة */
+.grid-nums .box { font-size: 2.8rem; }
 
 .box:hover { transform: scale(1.08); filter: brightness(1.15); }
 .box:active { transform: scale(0.95); }
 
-#info {
-  font-size: 1.5rem; margin-top: 15px;
-  color: #2d3436; font-weight: bold;
-  min-height: 40px;
+#info, .question {
+  font-size: 1.4rem; margin-top: 15px; font-weight: bold; min-height: 40px;
 }
+#info { color: #2d3436; }
+.question { color: #d63031; }
 
-.question {
-  font-size: 1.6rem; color: #d63031;
-  margin-bottom: 15px; font-weight: bold;
-  min-height: 40px;
-}
-
-.stars {
-  font-size: 1.5rem; letter-spacing: 3px;
-  margin-bottom: 10px;
-}
+.stars { font-size: 1.5rem; letter-spacing: 3px; margin-bottom: 10px; }
 
 .speak {
   background: #fdcb6e; border: none; padding: 15px 30px;
   font-size: 1.3rem; border-radius: 25px; cursor: pointer;
-  margin-bottom: 15px; font-weight: bold;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  min-height: 60px;
+  margin-bottom: 15px; font-weight: bold; min-height: 60px;
 }
-
 .speak:hover { background: #ffeaa7; }
-.speak:active { transform: scale(0.96); }
 
 .back-btn {
   background: #636e72; color: #fff; border: none;
   padding: 12px 25px; font-size: 1.1rem;
   border-radius: 20px; cursor: pointer;
-  margin-top: 20px; font-weight: bold;
-  min-height: 50px;
+  margin-top: 20px; font-weight: bold; min-height: 50px;
 }
 
-.back-btn:hover { background: #2d3436; }
-
-#result {
-  min-height: 40px; font-size: 1.4rem;
-  margin-top: 15px; font-weight: bold;
-}
+#result { min-height: 40px; font-size: 1.4rem; margin-top: 15px; font-weight: bold; }
 
 .final-screen { text-align: center; padding: 20px; }
 .final-screen .big-emoji { font-size: 5rem; }
 .final-screen h2 { font-size: 2rem; color: #00b894; }
 .final-screen p { font-size: 1.3rem; color: #636e72; }
 
+/* باش يتجاوب مع الشاشات الصغيرة تاع التيليفون */
 @media (max-width: 480px) {
   body { padding: 10px; }
   h1 { font-size: 1.5rem; }
@@ -143,7 +122,8 @@ h1 {
   .menu-grid { gap: 10px; }
   .menu-btn { font-size: 2.5rem; min-height: 110px; padding: 15px 5px; }
   .menu-btn .label { font-size: 1rem; }
-  .grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .box { font-size: 2rem; padding: 15px 0; min-height: 65px; }
-  .modes button, .levels button { font-size: 0.9rem; padding: 10px 14px; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .grid-nums { grid-template-columns: repeat(4, 1fr); } /* الأرقام 4 في صف في التيليفون */
+  .box { font-size: 1.3rem; padding: 12px 5px; min-height: 65px; }
+  .grid-nums .box { font-size: 2rem; }
 }
