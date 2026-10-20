@@ -61,40 +61,29 @@ h1 {
 .panel.on { display: block; }
 
 .grid {
-  display: grid; gap: 10px; margin-top: 15px;
+  display: grid; grid-template-columns: repeat(3, 1fr); /* 3 أعمدة باش الكلمات تبان */
+  gap: 10px; margin-top: 15px;
 }
 
-/* الأعمدة حسب النوع */
+/* استثناء للأرقام باش تبقى كبار وتجي 5 في صف */
 .grid-nums { grid-template-columns: repeat(5, 1fr); }
-.grid-text { grid-template-columns: repeat(3, 1fr); }
 
 .box {
-  color: #fff; font-size: 1.5rem; font-weight: bold;
+  color: #fff; font-size: 1.5rem; font-weight: bold; /* صغرنا الخط باش الكلمات تدخل */
   padding: 15px 5px; border-radius: 15px;
   cursor: pointer; transition: 0.15s;
   text-shadow: 2px 2px 3px rgba(0,0,0,0.3);
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   min-height: 80px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   word-wrap: break-word; text-align: center;
 }
 
+/* الاستثناء للأرقام باش ترجع كبيرة */
 .grid-nums .box { font-size: 2.8rem; }
 
 .box:hover { transform: scale(1.08); filter: brightness(1.15); }
 .box:active { transform: scale(0.95); }
-
-/* رسومات الأشكال الهندسية */
-.shape { display: block; margin: 0 auto 8px auto; }
-.shape-circle { width: 40px; height: 40px; border-radius: 50%; background: #fff; }
-.shape-square { width: 40px; height: 40px; background: #fff; }
-.shape-triangle { 
-  width: 0; height: 0; 
-  border-left: 22px solid transparent; 
-  border-right: 22px solid transparent; 
-  border-bottom: 40px solid #fff; 
-}
-.shape-text { font-size: 1.1rem; }
 
 #info, .question {
   font-size: 1.4rem; margin-top: 15px; font-weight: bold; min-height: 40px;
@@ -125,6 +114,7 @@ h1 {
 .final-screen h2 { font-size: 2rem; color: #00b894; }
 .final-screen p { font-size: 1.3rem; color: #636e72; }
 
+/* باش يتجاوب مع الشاشات الصغيرة تاع التيليفون */
 @media (max-width: 480px) {
   body { padding: 10px; }
   h1 { font-size: 1.5rem; }
@@ -132,8 +122,8 @@ h1 {
   .menu-grid { gap: 10px; }
   .menu-btn { font-size: 2.5rem; min-height: 110px; padding: 15px 5px; }
   .menu-btn .label { font-size: 1rem; }
-  .grid-nums { grid-template-columns: repeat(4, 1fr); }
-  .grid-text { grid-template-columns: repeat(2, 1fr); }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .grid-nums { grid-template-columns: repeat(4, 1fr); } /* الأرقام 4 في صف في التيليفون */
   .box { font-size: 1.3rem; padding: 12px 5px; min-height: 65px; }
   .grid-nums .box { font-size: 2rem; }
 }
