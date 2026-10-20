@@ -1,34 +1,34 @@
-/* =========================================
-   game-engine.js — محرك اللعبة المشترك
-   ========================================= */
 const Game = (function () {
   let config = {};
   let currentTarget = null;
   let stars = 0;
   let locked = false;
   let questionsThisRound = 0;
-  const MAX_QUESTIONS = 5; // 5 أسئلة فـ الجولة
+  const MAX_QUESTIONS = 5;
 
-  // ألوان الأرقام باش كل رقم يبان بلونو
   const COLORS = [
     '#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6',
     '#1abc9c','#e91e63','#34495e','#ff6b6b','#00b894'
   ];
 
+  // ألوان حقيقية باش تبان في قسم الألوان
+  const COLOR_HEX = {
+    'أحمر': '#e74c3c',
+    'أزرق': '#3498db',
+    'أخضر': '#2ecc71',
+    'أصفر': '#f1c40f',
+    'برتقالي': '#e67e22',
+    'بنفسجي': '#9b59b6'
+  };
+
   function colorOf(n) { return COLORS[(n - 1) % COLORS.length]; }
 
   function init(options) {
-    // إعدادات افتراضية تتبدل حسب القسم (أرقام، ألوان، أشكال)
     config = Object.assign({
-      title: '',
-      items: [],
-      speakItem: (i) => String(i),
-      targetSpeak: (i) => `وين راه ${i}؟`,
-      correctMsg: 'أحسنت! 🌟',
-      wrongMsg: 'عاود حاول 💪',
-      choicesCount: 3, // 3 خيارات فقط كيما اتفقنا
-      colorMode: 'number',
-      speechKey: 'num'
+      title: '', items: [], speakItem: (i) => String(i),
+      targetSpeak: (i) => `وين راه ${i}؟`, correctMsg: 'أحسنت! 🌟',
+      wrongMsg: 'عاود حاول 💪', choicesCount: 3,
+      colorMode: 'number', speechKey: 'num'
     }, options);
 
     document.getElementById('gameTitle').innerText = config.title;
@@ -36,21 +36,39 @@ const Game = (function () {
     switchMode('learn');
   }
 
-  // بناء شبكة وضع التعليم
+  // دالة كتخلق الصندوق وكتعرف واش نحطو رقم، لون، ولا شكل
+  function createBox(item) {
+    const box = document.createElement('div');
+    box.className = 'box';
+    
+    if (config.colorMode === 'number') {
+      box.style.background = colorOf(parseInt(item));
+      box.innerText = item;
+    } else if (config.colorMode === 'color') {
+      box.style.background = COLOR_HEX[item] || '#0984e3';
+      box.innerText = item;
+    } else if (config.colorMode === 'shape') {
+      box.style.background = '#2c3e50'; // لون خلفية غامق باش الشكل يبان
+      
+      // نختارو الشكل المناسب
+      let shapeClass = '';
+      if (item === 'دائرة') shapeClass = 'shape-circle';
+      else if (item === 'مربع') shapeClass = 'shape-square';
+      else if (item === 'مثلث') shapeClass = 'shape-triangle';
+      
+      // نرسمو الشكل ونكتبو الكلمة تحتو
+      box.innerHTML = `<div class="shape ${shapeClass}"></div><div class="shape-text">${item}</div>`;
+    }
+    
+    return box;
+  }
+
   function buildLearnGrid() {
     const grid = document.getElementById('learnGrid');
+    grid.className = 'grid ' + (config.colorMode === 'number' ? 'grid-nums' : 'grid-text');
     grid.innerHTML = '';
     config.items.forEach(item => {
-      const box = document.createElement('div');
-      box.className = 'box';
-      box.innerText = item;
-      
-      if (config.colorMode === 'number') {
-        box.style.background = colorOf(parseInt(item));
-      } else {
-        box.style.background = '#0984e3'; // لون موحد للألوان والأشكال
-      }
-      
+      const box = createBox(item);
       box.onclick = () => {
         document.getElementById('info').innerText = `${item} 🎈`;
         Voice.say(config.speakItem(item), config.speechKey + item);
@@ -59,7 +77,6 @@ const Game = (function () {
     });
   }
 
-  // التنقل بين وضع التعليم ووضع الاختبار
   function switchMode(mode) {
     document.getElementById('pLearn').classList.remove('on');
     document.getElementById('pQuiz').classList.remove('on');
@@ -76,38 +93,23 @@ const Game = (function () {
     }
   }
 
-  // تصفير الجولة
   function resetRound() {
-    stars = 0;
-    questionsThisRound = 0;
-    updateStars();
-    newRound();
+    stars = 0; questionsThisRound = 0; updateStars(); newRound();
   }
 
-  // تحديث النجوم (⭐ ولا ☆)
   function updateStars() {
     const el = document.getElementById('stars');
-    if (el) {
-      el.innerText = '⭐'.repeat(stars) + '☆'.repeat(MAX_QUESTIONS - stars);
-    }
+    if (el) el.innerText = '⭐'.repeat(stars) + '☆'.repeat(MAX_QUESTIONS - stars);
   }
 
-  // بداية سؤال جديد
   function newRound() {
     locked = false;
-
-    if (questionsThisRound >= MAX_QUESTIONS) {
-      showFinalScreen();
-      return;
-    }
+    if (questionsThisRound >= MAX_QUESTIONS) { showFinalScreen(); return; }
 
     document.getElementById('result').innerText = '';
     document.getElementById('question').innerText = 'وين راه المطلوب؟';
-
-    // اختيار الهدف بشكل عشوائي
     currentTarget = config.items[Math.floor(Math.random() * config.items.length)];
 
-    // خلط 3 خيارات
     let choices = [currentTarget];
     let safety = 0;
     while (choices.length < config.choicesCount && safety < 100) {
@@ -117,63 +119,42 @@ const Game = (function () {
     }
     choices.sort(() => Math.random() - 0.5);
 
-    // عرض الخيارات
     const grid = document.getElementById('quizGrid');
+    grid.className = 'grid ' + (config.colorMode === 'number' ? 'grid-nums' : 'grid-text');
     grid.innerHTML = '';
     choices.forEach(item => {
-      const box = document.createElement('div');
-      box.className = 'box';
-      box.innerText = item;
-      
-      if (config.colorMode === 'number') {
-        box.style.background = colorOf(parseInt(item));
-      } else {
-        box.style.background = '#0984e3';
-      }
-      
+      const box = createBox(item);
       box.onclick = () => checkAnswer(item);
       grid.appendChild(box);
     });
   }
 
-  // نطق السؤال
   async function hear() {
     if (!currentTarget) newRound();
     await Voice.say(`وين راه ${currentTarget}؟`, 'question');
   }
 
-  // كشف الإجابة
   async function checkAnswer(selected) {
     if (locked) return;
     locked = true;
-
     const resultEl = document.getElementById('result');
 
     if (selected === currentTarget) {
-      // إجابة صحيحة
-      stars++;
-      questionsThisRound++;
-      updateStars();
-      resultEl.style.color = '#00b894';
-      resultEl.innerText = config.correctMsg;
+      stars++; questionsThisRound++; updateStars();
+      resultEl.style.color = '#00b894'; resultEl.innerText = config.correctMsg;
       await Voice.say('أحسنت!', 'ahsant');
       setTimeout(newRound, 1200);
     } else {
-      // إجابة خاطئة
-      resultEl.style.color = '#d63031';
-      resultEl.innerText = config.wrongMsg;
+      resultEl.style.color = '#d63031'; resultEl.innerText = config.wrongMsg;
       await Voice.say('عاود حاول!', 'khata');
       locked = false;
     }
   }
 
-  // شاشة النتيجة النهائية
   function showFinalScreen() {
     const container = document.getElementById('pQuiz');
     const emoji = stars >= 4 ? '🎉' : stars >= 2 ? '😊' : '💪';
-    const msg = stars >= 4 ? 'برافو! أنت بطل!' :
-                stars >= 2 ? 'عمل جيد!' : 'عاود المحاولة!';
-                
+    const msg = stars >= 4 ? 'برافو! أنت بطل!' : stars >= 2 ? 'عمل جيد!' : 'عاود المحاولة!';
     container.innerHTML = `
       <div class="final-screen">
         <div class="big-emoji">${emoji}</div>
