@@ -19,6 +19,12 @@
 <h1>🌟 عالم الأرقام الصغيرة 🌟</h1>
 
 <div class="game">
+  
+  <!-- زر تحميل التطبيق (مخفي وكيظهر غير كي يكون واجد) -->
+  <button id="installAppBtn" class="install-btn" style="display: none;">
+    📥 حمل التطبيق هنا
+  </button>
+
   <h2 style="font-size:1.5rem;color:#636e72">اختر لعبتك 👇</h2>
 
   <div class="menu-grid">
@@ -52,7 +58,44 @@
   }, { once: true });
 </script>
 
-<!-- تشغيل التطبيق بلا أنترنت -->
+<!-- كود تحميل التطبيق (PWA) -->
+<script>
+  let deferredPrompt;
+  const installBtn = document.getElementById('installAppBtn');
+
+  // 1. على أندرويد (Chrome)
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = 'block';
+  });
+
+  // 2. كي يضغط المستعمل
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        installBtn.style.display = 'none';
+      }
+      deferredPrompt = null;
+    }
+  });
+
+  // 3. على الآيفون (Safari)
+  const isIos = () => {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    return /iphone|ipad|ipod/.test(userAgent);
+  };
+  const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+  if (isIos() && !isInStandaloneMode()) {
+    installBtn.style.display = 'block';
+    installBtn.innerText = '📥 حمل التطبيق (اضغط مشاركة ثم إضافة للشاشة)';
+  }
+</script>
+
+<!-- تشغيل الأنترنت أوفلاين -->
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
