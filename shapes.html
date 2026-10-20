@@ -11,20 +11,17 @@
 <h1 id="gameTitle">🔷 الأشكال</h1>
 
 <div class="game">
-  <!-- أزرار التنقل -->
   <div class="modes">
     <button id="mLearn" class="on" onclick="Game.switchMode('learn')">📖 تعليم</button>
     <button id="mQuiz" onclick="Game.switchMode('quiz')">🎮 اختبار</button>
   </div>
 
-  <!-- قسم التعليم -->
   <div class="panel on" id="pLearn">
     <h3>اضغط على أي شكل تسمع اسمه</h3>
     <div class="grid" id="learnGrid"></div>
     <div id="info">اختر شكل 👇</div>
   </div>
 
-  <!-- قسم الاختبار -->
   <div class="panel" id="pQuiz">
     <div class="stars" id="stars">☆☆☆☆☆</div>
     <div class="question" id="question">اضغط "اسمع" باش تبدا</div>
@@ -39,16 +36,15 @@
 <script src="shared/voice.js"></script>
 <script src="shared/game-engine.js"></script>
 <script>
-  // تشغيل اللعبة وإعدادات قسم الأشكال
   Game.init({
     title: '🔷 الأشكال',
-    items: ['دائرة', 'مربع', 'مثلث'], // 3 أشكال فقط
+    items: ['دائرة', 'مربع', 'مثلث'],
     speakItem: (s) => s,
     targetSpeak: (s) => `وين راه ${s}؟`,
     correctMsg: 'ممتاز! 🌟',
     wrongMsg: 'عاود حاول 💪',
-    choicesCount: 3, // 3 خيارات (كلهم مع بعض)
-    colorMode: 'text', // لون موحد باش ما يتلخبطش
+    choicesCount: 3,
+    colorMode: 'shape', // <--- هنا التعديل المهم
     speechKey: 'shape_'
   });
 </script>
