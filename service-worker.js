@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kids-game-v1';
+const CACHE_NAME = 'kids-game-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -7,17 +7,16 @@ const ASSETS = [
   './shapes.html',
   './shared/style.css',
   './shared/voice.js',
-  './shared/game-engine.js'
+  './shared/game-engine.js',
+  './icon.png'
 ];
 
-// تحميل الملفات وحفظها فالهاتف
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
 });
 
-// ملي تفتح التطبيق، يجيب الملفات من الهاتف بلا ما يحتاج نت
 self.addEventListener('fetch', (e) => {
   e.respondWith(
     caches.match(e.request).then((res) => res || fetch(e.request))
